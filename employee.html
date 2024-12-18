@@ -7,13 +7,16 @@
     <title>employee list</title>
 </head>
 <body>
-    <form action="">
+    <form id="form" action=""">
         <div class="container">
-            <input id="id_field" type="text" placeholder="Enter the id">
-            <input id="name_field" type="text" placeholder="Enter the Name">
+            <input id="emp_id" type="text" placeholder="Enter the id">
+            <input id="emp_name" type="text" placeholder="Enter the Name">
+            <input id="emp_code" type="text" placeholder="Enter the Code">
         </div>
-        <button class="add_btn" onclick="addFunction(event)">add</button>
-        <button class="cancel_btn">cancel</button>
+        <div class="btn">
+            <button class="add_btn" onclick="addEmployee(event)">add</button>
+            <button class="cancel_btn" onclick="clearFields(event)">cancel</button>
+        </div>    
     </form>
 
 
