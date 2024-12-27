@@ -16,6 +16,85 @@ function clearFields(event) {
     document.getElementById('emp_code').value = '';
 }
 
+function validateEmployee(id, name, code) {
+    if (id === "" || name === "" || code === "") {
+        alert("Please fill all the fields.");
+        return false;
+    }
+
+    if (!isNaN(name)) {
+        alert("Not your Name");
+        return false;
+    }
+
+    if (isNaN(id)) {
+        alert("Not an ID!");
+        return false;
+    }
+
+    if (!isCodeValid(code)) {
+        alert("Invalid Employee Code!!");
+        return false;
+    }
+    return true;
+}
+
+function isCodeValid(code) {
+    if (!containsUppercase(code)) {
+        return false;
+    }
+    if (!containsLowercase(code)) {
+        return false;
+    }
+    if (!containsNumber(code)) {
+        return false;
+    }
+    if (!containsSymbols(code)){
+        return false;
+    }
+    return true;
+}
+
+function containsUppercase(code) {
+    for (const char of code) {
+        const charCode = char.codePointAt(0);
+        if (charCode >= 65 && charCode <= 90) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function containsLowercase(code) {
+    for (const char of code) {
+        const charCode = char.codePointAt(0);
+        if (charCode >= 97 && charCode <= 122) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function containsNumber(code) {
+    for (const char of code) {
+        const charCode = char.codePointAt(0);
+        if (charCode >= 48 && charCode <= 57) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function containsSymbols(code){
+    for(const char of code){
+        const symbolCode = char.codePointAt(0)
+        if((symbolCode >= 32 && symbolCode <= 47) || (symbolCode >= 58 && symbolCode <= 64)){
+            return false;
+        }
+    }
+    return true;
+}
+
 function addEmployee(event) {
     event.preventDefault();
 
@@ -27,23 +106,7 @@ function addEmployee(event) {
     const name = nameField.value;
     const code = codeField.value;
 
-    if (id === "" || name === "" || code === "") {
-        alert("Please fill all the fields.");
-        return;
-    }
-
-    if(!isNaN(name)){
-        alert("Not your Name");
-        return;
-    }
-
-    if(isNaN(id)){
-        alert("Not an ID!");
-        return
-    }
-    
-    if(!validateCode(code)){
-        alert("Inavlid Employee Code!!");
+    if(!validateEmployee(id, name, code)){
         return
     }
 
@@ -60,9 +123,4 @@ function addEmployee(event) {
     idField.value = '';
     nameField.value = '';
     codeField.value = '';
-}
-
-function validateCode(code) {
-    const codeRegex = /^[A-Za-z0-9]+$/;
-    return codeRegex.test(code);
 }
