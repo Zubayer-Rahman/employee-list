@@ -1,4 +1,4 @@
-class employee{
+class Employee{
     constructor(id, name, code){
         this.id = id;
         this.name = name;
@@ -16,47 +16,55 @@ function clearFields(event) {
     document.getElementById('emp_code').value = '';
 }
 
-function validateEmployee(id, name, code) {
-    if (id === "" || name === "" || code === "") {
+function validateEmployee(Employee) {
+    if (Employee.id === "" || Employee.name === "" || Employee.code === "") {
         alert("Please fill all the fields.");
         return false;
     }
 
-    if (!isNaN(name)) {
+    if(!containsUppercase(Employee.name)){
+        alert("Name must contain at least one uppercase letter");
+        return false;
+    }
+
+    if (!isNaN(Employee.name)) {
         alert("Not your Name");
         return false;
     }
 
-    if (isNaN(id)) {
+    if (isNaN(Employee.id)) {
         alert("Not an ID!");
         return false;
     }
 
-    if (!isCodeValid(code)) {
-        alert("Invalid Employee Code!!");
+    if (!isCodeValid(Employee.code)) {
         return false;
     }
     return true;
 }
 
-function isCodeValid(code) {
-    if (!containsUppercase(code)) {
+function isCodeValid(empCode) {
+    if (!containsUppercase(empCode)) {
+        alert("Invalid Employee Code!!\nMust contain an uppercase leter!!");
         return false;
     }
-    if (!containsLowercase(code)) {
+    if (!containsLowercase(empCode)) {
+        alert("Invalid Employee Code!!\nMust contain an lowerrcase leter!!");
         return false;
     }
-    if (!containsNumber(code)) {
+    if (!containsNumber(empCode)) {
+        alert("Invalid Employee Code!!\nMust contain an number!!");
         return false;
     }
-    if (!containsSymbols(code)){
+    if (!containsSymbols(empCode)){
+        alert("Invalid Employee Code!!\nCannot contain a Symbol!!");
         return false;
     }
     return true;
 }
 
-function containsUppercase(code) {
-    for (const char of code) {
+function containsUppercase(str) {
+    for (const char of str) {
         const charCode = char.codePointAt(0);
         if (charCode >= 65 && charCode <= 90) {
             return true;
@@ -65,8 +73,8 @@ function containsUppercase(code) {
     return false;
 }
 
-function containsLowercase(code) {
-    for (const char of code) {
+function containsLowercase(str) {
+    for (const char of str) {
         const charCode = char.codePointAt(0);
         if (charCode >= 97 && charCode <= 122) {
             return true;
@@ -75,8 +83,8 @@ function containsLowercase(code) {
     return false;
 }
 
-function containsNumber(code) {
-    for (const char of code) {
+function containsNumber(int) {
+    for (const char of int) {
         const charCode = char.codePointAt(0);
         if (charCode >= 48 && charCode <= 57) {
             return true;
@@ -85,8 +93,8 @@ function containsNumber(code) {
     return false;
 }
 
-function containsSymbols(code){
-    for(const char of code){
+function containsSymbols(str){
+    for(const char of str){
         const symbolCode = char.codePointAt(0)
         if((symbolCode >= 32 && symbolCode <= 47) || (symbolCode >= 58 && symbolCode <= 64)){
             return false;
@@ -106,7 +114,9 @@ function addEmployee(event) {
     const name = nameField.value;
     const code = codeField.value;
 
-    if(!validateEmployee(id, name, code)){
+    const newEmployee = new Employee(id, name, code);
+
+    if(!validateEmployee(newEmployee)){
         return
     }
 
@@ -114,13 +124,39 @@ function addEmployee(event) {
     const isConfirmed = confirm(message);
 
     if (isConfirmed) {
-        const newEmployee = new employee(id, name, code);
+        const newEmployee = new Employee(id, name, code);
         employeeMap.set(newEmployee);
         console.log(employeeMap);
         alert("New Employee Added!!");
     }
 
+    displayEmployee();
+    
     idField.value = '';
     nameField.value = '';
     codeField.value = '';
+}
+
+function displayEmployee(){
+    const container = document.getElementById("employee-list");
+    container.innerHTML = "";
+
+    for(const [emp] of employeeMap){
+        const employeeInfoDiv = document.createElement('div');
+        employeeInfoDiv.className = 'employee-info'
+
+        const employeeId = document.createElement('p');
+        employeeId.textContent=`Id: ${emp.id}`
+        employeeInfoDiv.appendChild(employeeId);
+
+        const employeeName = document.createElement('p');
+        employeeName.textContent=`Name: ${emp.name}`
+        employeeInfoDiv.appendChild(employeeName);
+
+        const employeeCode = document.createElement('p');
+        employeeCode.textContent=`Code: ${emp.code}`
+        employeeInfoDiv.appendChild(employeeCode);
+
+        container.appendChild(employeeInfoDiv)
+    }
 }
