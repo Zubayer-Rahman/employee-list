@@ -16,28 +16,28 @@ function clearFields(event) {
     document.getElementById('emp_code').value = '';
 }
 
-function validateEmployee(Employee) {
-    if (Employee.id === "" || Employee.name === "" || Employee.code === "") {
+function validateEmployee(emp) {
+    if (emp.id === "" || emp.name === "" || emp.code === "") {
         alert("Please fill all the fields.");
         return false;
     }
 
-    if(!containsUppercase(Employee.name)){
+    if(!containsUppercase(emp.name)){
         alert("Name must contain at least one uppercase letter");
         return false;
     }
 
-    if (!isNaN(Employee.name)) {
+    if (!isNaN(emp.name)) {
         alert("Not your Name");
         return false;
     }
 
-    if (isNaN(Employee.id)) {
+    if (isNaN(emp.id)) {
         alert("Not an ID!");
         return false;
     }
 
-    if (!isCodeValid(Employee.code)) {
+    if (!isCodeValid(emp.code)) {
         return false;
     }
     return true;
@@ -116,7 +116,7 @@ function addEmployee(event) {
 
     const newEmployee = new Employee(id, name, code);
 
-    if(!validateEmployee(newEmployee)){
+    if(!validateEmployee(newEmployee)){ //validates employee fields
         return
     }
 
@@ -124,39 +124,35 @@ function addEmployee(event) {
     const isConfirmed = confirm(message);
 
     if (isConfirmed) {
-        const newEmployee = new Employee(id, name, code);
-        employeeMap.set(newEmployee);
+        employeeMap.set(newEmployee); //adds emp info to the map
         console.log(employeeMap);
         alert("New Employee Added!!");
     }
 
-    displayEmployee();
+    displayEmployee(newEmployee); //displayes newEmployee that has been added to the map
     
     idField.value = '';
     nameField.value = '';
     codeField.value = '';
 }
 
-function displayEmployee(){
+function displayEmployee(emp){
     const container = document.getElementById("employee-list");
-    container.innerHTML = "";
 
-    for(const [emp] of employeeMap){
-        const employeeInfoDiv = document.createElement('div');
-        employeeInfoDiv.className = 'employee-info'
+    const employeeInfoDiv = document.createElement('div');
+    employeeInfoDiv.className = 'employee-info'
 
-        const employeeId = document.createElement('p');
-        employeeId.textContent=`Id: ${emp.id}`
-        employeeInfoDiv.appendChild(employeeId);
+    const employeeId = document.createElement('p');
+    employeeId.textContent=`Id: ${emp.id}`
+    employeeInfoDiv.appendChild(employeeId);
 
-        const employeeName = document.createElement('p');
-        employeeName.textContent=`Name: ${emp.name}`
-        employeeInfoDiv.appendChild(employeeName);
+    const employeeName = document.createElement('p');
+    employeeName.textContent=`Name: ${emp.name}`
+    employeeInfoDiv.appendChild(employeeName);
 
-        const employeeCode = document.createElement('p');
-        employeeCode.textContent=`Code: ${emp.code}`
-        employeeInfoDiv.appendChild(employeeCode);
+    const employeeCode = document.createElement('p');
+    employeeCode.textContent=`Code: ${emp.code}`
+    employeeInfoDiv.appendChild(employeeCode);
 
-        container.appendChild(employeeInfoDiv)
-    }
+    container.appendChild(employeeInfoDiv)
 }
